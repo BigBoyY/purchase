@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turing.mapper.SysMenusMapper">
+  <resultMap id="BaseResultMap" type="com.turing.bean.SysMenus">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="PARENT_ID" jdbcType="BIGINT" property="parentId" />
+    <result column="SEQ" jdbcType="BIGINT" property="seq" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="TIP" jdbcType="VARCHAR" property="tip" />
+    <result column="DESCN" jdbcType="VARCHAR" property="descn" />
+    <result column="IMAGE_URL" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="TARGET" jdbcType="VARCHAR" property="target" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, PARENT_ID, SEQ, NAME, TIP, DESCN, IMAGE_URL, LINK_URL, TARGET, STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.turing.bean.SysMenusExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_menus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_menus
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_menus
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.turing.bean.SysMenusExample">
+    delete from sys_menus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.turing.bean.SysMenus">
+    insert into sys_menus (ID, PARENT_ID, SEQ, 
+      NAME, TIP, DESCN, IMAGE_URL, 
+      LINK_URL, TARGET, STATUS
+      )
+    values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{seq,jdbcType=BIGINT}, 
+      #{name,jdbcType=VARCHAR}, #{tip,jdbcType=VARCHAR}, #{descn,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{linkUrl,jdbcType=VARCHAR}, #{target,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.turing.bean.SysMenus">
+    insert into sys_menus
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="seq != null">
+        SEQ,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="tip != null">
+        TIP,
+      </if>
+      <if test="descn != null">
+        DESCN,
+      </if>
+      <if test="imageUrl != null">
+        IMAGE_URL,
+      </if>
+      <if test="linkUrl != null">
+        LINK_URL,
+      </if>
+      <if test="target != null">
+        TARGET,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tip != null">
+        #{tip,jdbcType=VARCHAR},
+      </if>
+      <if test="descn != null">
+        #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null">
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.turing.bean.SysMenusExample" resultType="java.lang.Long">
+    select count(*) from sys_menus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_menus
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.parentId != null">
+        PARENT_ID = #{record.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.seq != null">
+        SEQ = #{record.seq,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tip != null">
+        TIP = #{record.tip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.descn != null">
+        DESCN = #{record.descn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageUrl != null">
+        IMAGE_URL = #{record.imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkUrl != null">
+        LINK_URL = #{record.linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.target != null">
+        TARGET = #{record.target,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_menus
+    set ID = #{record.id,jdbcType=BIGINT},
+      PARENT_ID = #{record.parentId,jdbcType=BIGINT},
+      SEQ = #{record.seq,jdbcType=BIGINT},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      TIP = #{record.tip,jdbcType=VARCHAR},
+      DESCN = #{record.descn,jdbcType=VARCHAR},
+      IMAGE_URL = #{record.imageUrl,jdbcType=VARCHAR},
+      LINK_URL = #{record.linkUrl,jdbcType=VARCHAR},
+      TARGET = #{record.target,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.turing.bean.SysMenus">
+    update sys_menus
+    <set>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="seq != null">
+        SEQ = #{seq,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tip != null">
+        TIP = #{tip,jdbcType=VARCHAR},
+      </if>
+      <if test="descn != null">
+        DESCN = #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null">
+        LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        TARGET = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.turing.bean.SysMenus">
+    update sys_menus
+    set PARENT_ID = #{parentId,jdbcType=BIGINT},
+      SEQ = #{seq,jdbcType=BIGINT},
+      NAME = #{name,jdbcType=VARCHAR},
+      TIP = #{tip,jdbcType=VARCHAR},
+      DESCN = #{descn,jdbcType=VARCHAR},
+      IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+      LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+      TARGET = #{target,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

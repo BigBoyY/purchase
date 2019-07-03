@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turing.mapper.EnquireMapper">
+  <resultMap id="BaseResultMap" type="com.turing.bean.Enquire">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ENQUIRE_NUM" jdbcType="VARCHAR" property="enquireNum" />
+    <result column="ENQUIRE_NAME" jdbcType="VARCHAR" property="enquireName" />
+    <result column="COMPANY" jdbcType="VARCHAR" property="company" />
+    <result column="LINKMAN" jdbcType="VARCHAR" property="linkman" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="FAX" jdbcType="VARCHAR" property="fax" />
+    <result column="ZIP" jdbcType="VARCHAR" property="zip" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="END_DATE" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, ENQUIRE_NUM, ENQUIRE_NAME, COMPANY, LINKMAN, ADDRESS, PHONE, FAX, ZIP, EMAIL, 
+    END_DATE, REMARK
+  </sql>
+  <select id="selectByExample" parameterType="com.turing.bean.EnquireExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from enquire
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from enquire
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from enquire
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.turing.bean.EnquireExample">
+    delete from enquire
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.turing.bean.Enquire">
+    insert into enquire (ID, ENQUIRE_NUM, ENQUIRE_NAME, 
+      COMPANY, LINKMAN, ADDRESS, 
+      PHONE, FAX, ZIP, EMAIL, 
+      END_DATE, REMARK)
+    values (#{id,jdbcType=BIGINT}, #{enquireNum,jdbcType=VARCHAR}, #{enquireName,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{linkman,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{zip,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.turing.bean.Enquire">
+    insert into enquire
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="enquireNum != null">
+        ENQUIRE_NUM,
+      </if>
+      <if test="enquireName != null">
+        ENQUIRE_NAME,
+      </if>
+      <if test="company != null">
+        COMPANY,
+      </if>
+      <if test="linkman != null">
+        LINKMAN,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="fax != null">
+        FAX,
+      </if>
+      <if test="zip != null">
+        ZIP,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="endDate != null">
+        END_DATE,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="enquireNum != null">
+        #{enquireNum,jdbcType=VARCHAR},
+      </if>
+      <if test="enquireName != null">
+        #{enquireName,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null">
+        #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.turing.bean.EnquireExample" resultType="java.lang.Long">
+    select count(*) from enquire
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update enquire
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.enquireNum != null">
+        ENQUIRE_NUM = #{record.enquireNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enquireName != null">
+        ENQUIRE_NAME = #{record.enquireName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null">
+        COMPANY = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkman != null">
+        LINKMAN = #{record.linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        PHONE = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fax != null">
+        FAX = #{record.fax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zip != null">
+        ZIP = #{record.zip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endDate != null">
+        END_DATE = #{record.endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update enquire
+    set ID = #{record.id,jdbcType=BIGINT},
+      ENQUIRE_NUM = #{record.enquireNum,jdbcType=VARCHAR},
+      ENQUIRE_NAME = #{record.enquireName,jdbcType=VARCHAR},
+      COMPANY = #{record.company,jdbcType=VARCHAR},
+      LINKMAN = #{record.linkman,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      PHONE = #{record.phone,jdbcType=VARCHAR},
+      FAX = #{record.fax,jdbcType=VARCHAR},
+      ZIP = #{record.zip,jdbcType=VARCHAR},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      END_DATE = #{record.endDate,jdbcType=TIMESTAMP},
+      REMARK = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.turing.bean.Enquire">
+    update enquire
+    <set>
+      <if test="enquireNum != null">
+        ENQUIRE_NUM = #{enquireNum,jdbcType=VARCHAR},
+      </if>
+      <if test="enquireName != null">
+        ENQUIRE_NAME = #{enquireName,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        LINKMAN = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        FAX = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null">
+        ZIP = #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.turing.bean.Enquire">
+    update enquire
+    set ENQUIRE_NUM = #{enquireNum,jdbcType=VARCHAR},
+      ENQUIRE_NAME = #{enquireName,jdbcType=VARCHAR},
+      COMPANY = #{company,jdbcType=VARCHAR},
+      LINKMAN = #{linkman,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      FAX = #{fax,jdbcType=VARCHAR},
+      ZIP = #{zip,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

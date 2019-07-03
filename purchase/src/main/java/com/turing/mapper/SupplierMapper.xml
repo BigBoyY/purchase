@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turing.mapper.SupplierMapper">
+  <resultMap id="BaseResultMap" type="com.turing.bean.Supplier">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="SUPPLIER_NUM" jdbcType="VARCHAR" property="supplierNum" />
+    <result column="CERTIFICATE" jdbcType="VARCHAR" property="certificate" />
+    <result column="COMPANY" jdbcType="VARCHAR" property="company" />
+    <result column="KIND" jdbcType="VARCHAR" property="kind" />
+    <result column="CONTACT" jdbcType="VARCHAR" property="contact" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="FAX" jdbcType="VARCHAR" property="fax" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="ZIP" jdbcType="VARCHAR" property="zip" />
+    <result column="REG_FUND" jdbcType="VARCHAR" property="regFund" />
+    <result column="CORPORATION" jdbcType="VARCHAR" property="corporation" />
+    <result column="ACHIEVEMENT" jdbcType="BIGINT" property="achievement" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="USER_ID" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, SUPPLIER_NUM, CERTIFICATE, COMPANY, KIND, CONTACT, PHONE, FAX, EMAIL, ADDRESS, 
+    ZIP, REG_FUND, CORPORATION, ACHIEVEMENT, STATUS, USER_ID
+  </sql>
+  <select id="selectByExample" parameterType="com.turing.bean.SupplierExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supplier
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from supplier
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.turing.bean.SupplierExample">
+    delete from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.turing.bean.Supplier">
+    insert into supplier (ID, SUPPLIER_NUM, CERTIFICATE, 
+      COMPANY, KIND, CONTACT, 
+      PHONE, FAX, EMAIL, 
+      ADDRESS, ZIP, REG_FUND, 
+      CORPORATION, ACHIEVEMENT, STATUS, 
+      USER_ID)
+    values (#{id,jdbcType=BIGINT}, #{supplierNum,jdbcType=VARCHAR}, #{certificate,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{kind,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{zip,jdbcType=VARCHAR}, #{regFund,jdbcType=VARCHAR}, 
+      #{corporation,jdbcType=VARCHAR}, #{achievement,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.turing.bean.Supplier">
+    insert into supplier
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="supplierNum != null">
+        SUPPLIER_NUM,
+      </if>
+      <if test="certificate != null">
+        CERTIFICATE,
+      </if>
+      <if test="company != null">
+        COMPANY,
+      </if>
+      <if test="kind != null">
+        KIND,
+      </if>
+      <if test="contact != null">
+        CONTACT,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="fax != null">
+        FAX,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="zip != null">
+        ZIP,
+      </if>
+      <if test="regFund != null">
+        REG_FUND,
+      </if>
+      <if test="corporation != null">
+        CORPORATION,
+      </if>
+      <if test="achievement != null">
+        ACHIEVEMENT,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="supplierNum != null">
+        #{supplierNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null">
+        #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null">
+        #{kind,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null">
+        #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="regFund != null">
+        #{regFund,jdbcType=VARCHAR},
+      </if>
+      <if test="corporation != null">
+        #{corporation,jdbcType=VARCHAR},
+      </if>
+      <if test="achievement != null">
+        #{achievement,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.turing.bean.SupplierExample" resultType="java.lang.Long">
+    select count(*) from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update supplier
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.supplierNum != null">
+        SUPPLIER_NUM = #{record.supplierNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificate != null">
+        CERTIFICATE = #{record.certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null">
+        COMPANY = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kind != null">
+        KIND = #{record.kind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contact != null">
+        CONTACT = #{record.contact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        PHONE = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fax != null">
+        FAX = #{record.fax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zip != null">
+        ZIP = #{record.zip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regFund != null">
+        REG_FUND = #{record.regFund,jdbcType=VARCHAR},
+      </if>
+      <if test="record.corporation != null">
+        CORPORATION = #{record.corporation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.achievement != null">
+        ACHIEVEMENT = #{record.achievement,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update supplier
+    set ID = #{record.id,jdbcType=BIGINT},
+      SUPPLIER_NUM = #{record.supplierNum,jdbcType=VARCHAR},
+      CERTIFICATE = #{record.certificate,jdbcType=VARCHAR},
+      COMPANY = #{record.company,jdbcType=VARCHAR},
+      KIND = #{record.kind,jdbcType=VARCHAR},
+      CONTACT = #{record.contact,jdbcType=VARCHAR},
+      PHONE = #{record.phone,jdbcType=VARCHAR},
+      FAX = #{record.fax,jdbcType=VARCHAR},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      ZIP = #{record.zip,jdbcType=VARCHAR},
+      REG_FUND = #{record.regFund,jdbcType=VARCHAR},
+      CORPORATION = #{record.corporation,jdbcType=VARCHAR},
+      ACHIEVEMENT = #{record.achievement,jdbcType=BIGINT},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      USER_ID = #{record.userId,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.turing.bean.Supplier">
+    update supplier
+    <set>
+      <if test="supplierNum != null">
+        SUPPLIER_NUM = #{supplierNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null">
+        CERTIFICATE = #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="kind != null">
+        KIND = #{kind,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        FAX = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null">
+        ZIP = #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="regFund != null">
+        REG_FUND = #{regFund,jdbcType=VARCHAR},
+      </if>
+      <if test="corporation != null">
+        CORPORATION = #{corporation,jdbcType=VARCHAR},
+      </if>
+      <if test="achievement != null">
+        ACHIEVEMENT = #{achievement,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.turing.bean.Supplier">
+    update supplier
+    set SUPPLIER_NUM = #{supplierNum,jdbcType=VARCHAR},
+      CERTIFICATE = #{certificate,jdbcType=VARCHAR},
+      COMPANY = #{company,jdbcType=VARCHAR},
+      KIND = #{kind,jdbcType=VARCHAR},
+      CONTACT = #{contact,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      FAX = #{fax,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      ZIP = #{zip,jdbcType=VARCHAR},
+      REG_FUND = #{regFund,jdbcType=VARCHAR},
+      CORPORATION = #{corporation,jdbcType=VARCHAR},
+      ACHIEVEMENT = #{achievement,jdbcType=BIGINT},
+      STATUS = #{status,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

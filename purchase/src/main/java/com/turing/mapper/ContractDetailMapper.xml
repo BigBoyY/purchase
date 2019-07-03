@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turing.mapper.ContractDetailMapper">
+  <resultMap id="BaseResultMap" type="com.turing.bean.ContractDetail">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="CONT_ID" jdbcType="BIGINT" property="contId" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="AMOUNT" jdbcType="VARCHAR" property="amount" />
+    <result column="UNIT_PRICE" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="MEASURE_UNIT" jdbcType="VARCHAR" property="measureUnit" />
+    <result column="SUM_PRICE" jdbcType="DECIMAL" property="sumPrice" />
+    <result column="MIX_PRICE" jdbcType="DECIMAL" property="mixPrice" />
+    <result column="OTHER_PRICE" jdbcType="DECIMAL" property="otherPrice" />
+    <result column="TOTAL_PRICE" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="END_DATE" jdbcType="VARCHAR" property="endDate" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="MODE" jdbcType="VARCHAR" property="mode" />
+    <result column="WRAP_REQUIRE" jdbcType="VARCHAR" property="wrapRequire" />
+    <result column="FACTORY" jdbcType="VARCHAR" property="factory" />
+    <result column="OTHER_REQUIRE" jdbcType="VARCHAR" property="otherRequire" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, CONT_ID, MATERIAL_CODE, MATERIAL_NAME, AMOUNT, UNIT_PRICE, MEASURE_UNIT, SUM_PRICE, 
+    MIX_PRICE, OTHER_PRICE, TOTAL_PRICE, END_DATE, ADDRESS, MODE, WRAP_REQUIRE, FACTORY, 
+    OTHER_REQUIRE
+  </sql>
+  <select id="selectByExample" parameterType="com.turing.bean.ContractDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from contract_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from contract_detail
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from contract_detail
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.turing.bean.ContractDetailExample">
+    delete from contract_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.turing.bean.ContractDetail">
+    insert into contract_detail (ID, CONT_ID, MATERIAL_CODE, 
+      MATERIAL_NAME, AMOUNT, UNIT_PRICE, 
+      MEASURE_UNIT, SUM_PRICE, MIX_PRICE, 
+      OTHER_PRICE, TOTAL_PRICE, END_DATE, 
+      ADDRESS, MODE, WRAP_REQUIRE, 
+      FACTORY, OTHER_REQUIRE)
+    values (#{id,jdbcType=BIGINT}, #{contId,jdbcType=BIGINT}, #{materialCode,jdbcType=VARCHAR}, 
+      #{materialName,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, 
+      #{measureUnit,jdbcType=VARCHAR}, #{sumPrice,jdbcType=DECIMAL}, #{mixPrice,jdbcType=DECIMAL}, 
+      #{otherPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{endDate,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{mode,jdbcType=VARCHAR}, #{wrapRequire,jdbcType=VARCHAR}, 
+      #{factory,jdbcType=VARCHAR}, #{otherRequire,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.turing.bean.ContractDetail">
+    insert into contract_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="contId != null">
+        CONT_ID,
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE,
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME,
+      </if>
+      <if test="amount != null">
+        AMOUNT,
+      </if>
+      <if test="unitPrice != null">
+        UNIT_PRICE,
+      </if>
+      <if test="measureUnit != null">
+        MEASURE_UNIT,
+      </if>
+      <if test="sumPrice != null">
+        SUM_PRICE,
+      </if>
+      <if test="mixPrice != null">
+        MIX_PRICE,
+      </if>
+      <if test="otherPrice != null">
+        OTHER_PRICE,
+      </if>
+      <if test="totalPrice != null">
+        TOTAL_PRICE,
+      </if>
+      <if test="endDate != null">
+        END_DATE,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="mode != null">
+        MODE,
+      </if>
+      <if test="wrapRequire != null">
+        WRAP_REQUIRE,
+      </if>
+      <if test="factory != null">
+        FACTORY,
+      </if>
+      <if test="otherRequire != null">
+        OTHER_REQUIRE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="contId != null">
+        #{contId,jdbcType=BIGINT},
+      </if>
+      <if test="materialCode != null">
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="measureUnit != null">
+        #{measureUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="sumPrice != null">
+        #{sumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="mixPrice != null">
+        #{mixPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPrice != null">
+        #{otherPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mode != null">
+        #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="wrapRequire != null">
+        #{wrapRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="factory != null">
+        #{factory,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRequire != null">
+        #{otherRequire,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.turing.bean.ContractDetailExample" resultType="java.lang.Long">
+    select count(*) from contract_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update contract_detail
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.contId != null">
+        CONT_ID = #{record.contId,jdbcType=BIGINT},
+      </if>
+      <if test="record.materialCode != null">
+        MATERIAL_CODE = #{record.materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialName != null">
+        MATERIAL_NAME = #{record.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null">
+        AMOUNT = #{record.amount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPrice != null">
+        UNIT_PRICE = #{record.unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.measureUnit != null">
+        MEASURE_UNIT = #{record.measureUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sumPrice != null">
+        SUM_PRICE = #{record.sumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.mixPrice != null">
+        MIX_PRICE = #{record.mixPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.otherPrice != null">
+        OTHER_PRICE = #{record.otherPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalPrice != null">
+        TOTAL_PRICE = #{record.totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.endDate != null">
+        END_DATE = #{record.endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mode != null">
+        MODE = #{record.mode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wrapRequire != null">
+        WRAP_REQUIRE = #{record.wrapRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="record.factory != null">
+        FACTORY = #{record.factory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherRequire != null">
+        OTHER_REQUIRE = #{record.otherRequire,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update contract_detail
+    set ID = #{record.id,jdbcType=BIGINT},
+      CONT_ID = #{record.contId,jdbcType=BIGINT},
+      MATERIAL_CODE = #{record.materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{record.materialName,jdbcType=VARCHAR},
+      AMOUNT = #{record.amount,jdbcType=VARCHAR},
+      UNIT_PRICE = #{record.unitPrice,jdbcType=DECIMAL},
+      MEASURE_UNIT = #{record.measureUnit,jdbcType=VARCHAR},
+      SUM_PRICE = #{record.sumPrice,jdbcType=DECIMAL},
+      MIX_PRICE = #{record.mixPrice,jdbcType=DECIMAL},
+      OTHER_PRICE = #{record.otherPrice,jdbcType=DECIMAL},
+      TOTAL_PRICE = #{record.totalPrice,jdbcType=DECIMAL},
+      END_DATE = #{record.endDate,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      MODE = #{record.mode,jdbcType=VARCHAR},
+      WRAP_REQUIRE = #{record.wrapRequire,jdbcType=VARCHAR},
+      FACTORY = #{record.factory,jdbcType=VARCHAR},
+      OTHER_REQUIRE = #{record.otherRequire,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.turing.bean.ContractDetail">
+    update contract_detail
+    <set>
+      <if test="contId != null">
+        CONT_ID = #{contId,jdbcType=BIGINT},
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        AMOUNT = #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        UNIT_PRICE = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="measureUnit != null">
+        MEASURE_UNIT = #{measureUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="sumPrice != null">
+        SUM_PRICE = #{sumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="mixPrice != null">
+        MIX_PRICE = #{mixPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPrice != null">
+        OTHER_PRICE = #{otherPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        TOTAL_PRICE = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="endDate != null">
+        END_DATE = #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mode != null">
+        MODE = #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="wrapRequire != null">
+        WRAP_REQUIRE = #{wrapRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="factory != null">
+        FACTORY = #{factory,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRequire != null">
+        OTHER_REQUIRE = #{otherRequire,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.turing.bean.ContractDetail">
+    update contract_detail
+    set CONT_ID = #{contId,jdbcType=BIGINT},
+      MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      AMOUNT = #{amount,jdbcType=VARCHAR},
+      UNIT_PRICE = #{unitPrice,jdbcType=DECIMAL},
+      MEASURE_UNIT = #{measureUnit,jdbcType=VARCHAR},
+      SUM_PRICE = #{sumPrice,jdbcType=DECIMAL},
+      MIX_PRICE = #{mixPrice,jdbcType=DECIMAL},
+      OTHER_PRICE = #{otherPrice,jdbcType=DECIMAL},
+      TOTAL_PRICE = #{totalPrice,jdbcType=DECIMAL},
+      END_DATE = #{endDate,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      MODE = #{mode,jdbcType=VARCHAR},
+      WRAP_REQUIRE = #{wrapRequire,jdbcType=VARCHAR},
+      FACTORY = #{factory,jdbcType=VARCHAR},
+      OTHER_REQUIRE = #{otherRequire,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
