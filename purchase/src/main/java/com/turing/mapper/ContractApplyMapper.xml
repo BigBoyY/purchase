@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turing.mapper.ContractApplyMapper">
+  <resultMap id="BaseResultMap" type="com.turing.bean.ContractApply">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="CONT_APP_NUM" jdbcType="VARCHAR" property="contAppNum" />
+    <result column="STAT_QUOTE" jdbcType="VARCHAR" property="statQuote" />
+    <result column="TOP_QUOTE" jdbcType="VARCHAR" property="topQuote" />
+    <result column="LOW_QUOTE" jdbcType="VARCHAR" property="lowQuote" />
+    <result column="ALL_SUM_PRICE" jdbcType="DECIMAL" property="allSumPrice" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="AUTHOR_ID" jdbcType="BIGINT" property="authorId" />
+    <result column="AUTHOR" jdbcType="VARCHAR" property="author" />
+    <result column="PLANER_ID" jdbcType="BIGINT" property="planerId" />
+    <result column="PLANER" jdbcType="VARCHAR" property="planer" />
+    <result column="PLAN_AGREE" jdbcType="VARCHAR" property="planAgree" />
+    <result column="PLAN_OPINION" jdbcType="VARCHAR" property="planOpinion" />
+    <result column="PLAN_DATE" jdbcType="TIMESTAMP" property="planDate" />
+    <result column="LEADER_ID" jdbcType="BIGINT" property="leaderId" />
+    <result column="LEADER" jdbcType="VARCHAR" property="leader" />
+    <result column="LEAD_AGREE" jdbcType="VARCHAR" property="leadAgree" />
+    <result column="LEAD_OPINION" jdbcType="VARCHAR" property="leadOpinion" />
+    <result column="LEAD_DATE" jdbcType="TIMESTAMP" property="leadDate" />
+    <association column="AUTHOR_ID" property="authorObj" select="selectAUTHOR" />
+    <association column="PLANER_ID" property="planerObj" select="selectPLANER" />
+    <association column="LEADER_ID" property="leaderObj" select="selectLEADER" />
+  </resultMap>
+   <select id="selectAUTHOR" resultType="com.turing.bean.SysUsers">
+  	select * from sys_users where id = #{AUTHOR_ID}
+  </select>
+  <select id="selectPLANER" resultType="com.turing.bean.SysUsers">
+  	select * from sys_users where id = #{PLANER_ID}
+  </select>
+  <select id="selectLEADER" resultType="com.turing.bean.SysUsers">
+  	select * from sys_users where id = #{LEADER_ID}
+  </select>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, CONT_APP_NUM, STAT_QUOTE, TOP_QUOTE, LOW_QUOTE, ALL_SUM_PRICE, REMARK, AUTHOR_ID, 
+    AUTHOR, PLANER_ID, PLANER, PLAN_AGREE, PLAN_OPINION, PLAN_DATE, LEADER_ID, LEADER, 
+    LEAD_AGREE, LEAD_OPINION, LEAD_DATE
+  </sql>
+  <select id="selectByExample" parameterType="com.turing.bean.ContractApplyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from contract_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from contract_apply
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from contract_apply
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.turing.bean.ContractApplyExample">
+    delete from contract_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.turing.bean.ContractApply">
+    insert into contract_apply (ID, CONT_APP_NUM, STAT_QUOTE, 
+      TOP_QUOTE, LOW_QUOTE, ALL_SUM_PRICE, 
+      REMARK, AUTHOR_ID, AUTHOR, 
+      PLANER_ID, PLANER, PLAN_AGREE, 
+      PLAN_OPINION, PLAN_DATE, LEADER_ID, 
+      LEADER, LEAD_AGREE, LEAD_OPINION, 
+      LEAD_DATE)
+    values (#{id,jdbcType=BIGINT}, #{contAppNum,jdbcType=VARCHAR}, #{statQuote,jdbcType=VARCHAR}, 
+      #{topQuote,jdbcType=VARCHAR}, #{lowQuote,jdbcType=VARCHAR}, #{allSumPrice,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{authorId,jdbcType=BIGINT}, #{author,jdbcType=VARCHAR}, 
+      #{planerId,jdbcType=BIGINT}, #{planer,jdbcType=VARCHAR}, #{planAgree,jdbcType=VARCHAR}, 
+      #{planOpinion,jdbcType=VARCHAR}, #{planDate,jdbcType=TIMESTAMP}, #{leaderId,jdbcType=BIGINT}, 
+      #{leader,jdbcType=VARCHAR}, #{leadAgree,jdbcType=VARCHAR}, #{leadOpinion,jdbcType=VARCHAR}, 
+      #{leadDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.turing.bean.ContractApply">
+    insert into contract_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="contAppNum != null">
+        CONT_APP_NUM,
+      </if>
+      <if test="statQuote != null">
+        STAT_QUOTE,
+      </if>
+      <if test="topQuote != null">
+        TOP_QUOTE,
+      </if>
+      <if test="lowQuote != null">
+        LOW_QUOTE,
+      </if>
+      <if test="allSumPrice != null">
+        ALL_SUM_PRICE,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="authorId != null">
+        AUTHOR_ID,
+      </if>
+      <if test="author != null">
+        AUTHOR,
+      </if>
+      <if test="planerId != null">
+        PLANER_ID,
+      </if>
+      <if test="planer != null">
+        PLANER,
+      </if>
+      <if test="planAgree != null">
+        PLAN_AGREE,
+      </if>
+      <if test="planOpinion != null">
+        PLAN_OPINION,
+      </if>
+      <if test="planDate != null">
+        PLAN_DATE,
+      </if>
+      <if test="leaderId != null">
+        LEADER_ID,
+      </if>
+      <if test="leader != null">
+        LEADER,
+      </if>
+      <if test="leadAgree != null">
+        LEAD_AGREE,
+      </if>
+      <if test="leadOpinion != null">
+        LEAD_OPINION,
+      </if>
+      <if test="leadDate != null">
+        LEAD_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="contAppNum != null">
+        #{contAppNum,jdbcType=VARCHAR},
+      </if>
+      <if test="statQuote != null">
+        #{statQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="topQuote != null">
+        #{topQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="lowQuote != null">
+        #{lowQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="allSumPrice != null">
+        #{allSumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=BIGINT},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="planerId != null">
+        #{planerId,jdbcType=BIGINT},
+      </if>
+      <if test="planer != null">
+        #{planer,jdbcType=VARCHAR},
+      </if>
+      <if test="planAgree != null">
+        #{planAgree,jdbcType=VARCHAR},
+      </if>
+      <if test="planOpinion != null">
+        #{planOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="planDate != null">
+        #{planDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaderId != null">
+        #{leaderId,jdbcType=BIGINT},
+      </if>
+      <if test="leader != null">
+        #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="leadAgree != null">
+        #{leadAgree,jdbcType=VARCHAR},
+      </if>
+      <if test="leadOpinion != null">
+        #{leadOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="leadDate != null">
+        #{leadDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.turing.bean.ContractApplyExample" resultType="java.lang.Long">
+    select count(*) from contract_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update contract_apply
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.contAppNum != null">
+        CONT_APP_NUM = #{record.contAppNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statQuote != null">
+        STAT_QUOTE = #{record.statQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topQuote != null">
+        TOP_QUOTE = #{record.topQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lowQuote != null">
+        LOW_QUOTE = #{record.lowQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.allSumPrice != null">
+        ALL_SUM_PRICE = #{record.allSumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorId != null">
+        AUTHOR_ID = #{record.authorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.author != null">
+        AUTHOR = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planerId != null">
+        PLANER_ID = #{record.planerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.planer != null">
+        PLANER = #{record.planer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planAgree != null">
+        PLAN_AGREE = #{record.planAgree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planOpinion != null">
+        PLAN_OPINION = #{record.planOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planDate != null">
+        PLAN_DATE = #{record.planDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.leaderId != null">
+        LEADER_ID = #{record.leaderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.leader != null">
+        LEADER = #{record.leader,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leadAgree != null">
+        LEAD_AGREE = #{record.leadAgree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leadOpinion != null">
+        LEAD_OPINION = #{record.leadOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leadDate != null">
+        LEAD_DATE = #{record.leadDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update contract_apply
+    set ID = #{record.id,jdbcType=BIGINT},
+      CONT_APP_NUM = #{record.contAppNum,jdbcType=VARCHAR},
+      STAT_QUOTE = #{record.statQuote,jdbcType=VARCHAR},
+      TOP_QUOTE = #{record.topQuote,jdbcType=VARCHAR},
+      LOW_QUOTE = #{record.lowQuote,jdbcType=VARCHAR},
+      ALL_SUM_PRICE = #{record.allSumPrice,jdbcType=DECIMAL},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      AUTHOR_ID = #{record.authorId,jdbcType=BIGINT},
+      AUTHOR = #{record.author,jdbcType=VARCHAR},
+      PLANER_ID = #{record.planerId,jdbcType=BIGINT},
+      PLANER = #{record.planer,jdbcType=VARCHAR},
+      PLAN_AGREE = #{record.planAgree,jdbcType=VARCHAR},
+      PLAN_OPINION = #{record.planOpinion,jdbcType=VARCHAR},
+      PLAN_DATE = #{record.planDate,jdbcType=TIMESTAMP},
+      LEADER_ID = #{record.leaderId,jdbcType=BIGINT},
+      LEADER = #{record.leader,jdbcType=VARCHAR},
+      LEAD_AGREE = #{record.leadAgree,jdbcType=VARCHAR},
+      LEAD_OPINION = #{record.leadOpinion,jdbcType=VARCHAR},
+      LEAD_DATE = #{record.leadDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.turing.bean.ContractApply">
+    update contract_apply
+    <set>
+      <if test="contAppNum != null">
+        CONT_APP_NUM = #{contAppNum,jdbcType=VARCHAR},
+      </if>
+      <if test="statQuote != null">
+        STAT_QUOTE = #{statQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="topQuote != null">
+        TOP_QUOTE = #{topQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="lowQuote != null">
+        LOW_QUOTE = #{lowQuote,jdbcType=VARCHAR},
+      </if>
+      <if test="allSumPrice != null">
+        ALL_SUM_PRICE = #{allSumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="authorId != null">
+        AUTHOR_ID = #{authorId,jdbcType=BIGINT},
+      </if>
+      <if test="author != null">
+        AUTHOR = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="planerId != null">
+        PLANER_ID = #{planerId,jdbcType=BIGINT},
+      </if>
+      <if test="planer != null">
+        PLANER = #{planer,jdbcType=VARCHAR},
+      </if>
+      <if test="planAgree != null">
+        PLAN_AGREE = #{planAgree,jdbcType=VARCHAR},
+      </if>
+      <if test="planOpinion != null">
+        PLAN_OPINION = #{planOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="planDate != null">
+        PLAN_DATE = #{planDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaderId != null">
+        LEADER_ID = #{leaderId,jdbcType=BIGINT},
+      </if>
+      <if test="leader != null">
+        LEADER = #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="leadAgree != null">
+        LEAD_AGREE = #{leadAgree,jdbcType=VARCHAR},
+      </if>
+      <if test="leadOpinion != null">
+        LEAD_OPINION = #{leadOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="leadDate != null">
+        LEAD_DATE = #{leadDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.turing.bean.ContractApply">
+    update contract_apply
+    set CONT_APP_NUM = #{contAppNum,jdbcType=VARCHAR},
+      STAT_QUOTE = #{statQuote,jdbcType=VARCHAR},
+      TOP_QUOTE = #{topQuote,jdbcType=VARCHAR},
+      LOW_QUOTE = #{lowQuote,jdbcType=VARCHAR},
+      ALL_SUM_PRICE = #{allSumPrice,jdbcType=DECIMAL},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      AUTHOR_ID = #{authorId,jdbcType=BIGINT},
+      AUTHOR = #{author,jdbcType=VARCHAR},
+      PLANER_ID = #{planerId,jdbcType=BIGINT},
+      PLANER = #{planer,jdbcType=VARCHAR},
+      PLAN_AGREE = #{planAgree,jdbcType=VARCHAR},
+      PLAN_OPINION = #{planOpinion,jdbcType=VARCHAR},
+      PLAN_DATE = #{planDate,jdbcType=TIMESTAMP},
+      LEADER_ID = #{leaderId,jdbcType=BIGINT},
+      LEADER = #{leader,jdbcType=VARCHAR},
+      LEAD_AGREE = #{leadAgree,jdbcType=VARCHAR},
+      LEAD_OPINION = #{leadOpinion,jdbcType=VARCHAR},
+      LEAD_DATE = #{leadDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

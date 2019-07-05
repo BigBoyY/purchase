@@ -1,0 +1,58 @@
+mybatis: 
+  ##type-aliases-package: com.turing.entity
+  configuration: 
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    lazy-load-trigger-methods: -""
+    map-underscore-to-camel-case: true
+#logging:
+  #level:
+    #com.turing.mapper: debug
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update 
+  datasource:
+    druid:
+    #数据库连接四要素
+      url: jdbc:mysql://localhost:3306/purchase?serverTimezone=UTC
+      username: root
+      #YKp2KHCkwienjF/K5/U6DmIgRaqglJUJpFPgJmmDtRtf4ufkDMKtAsKYwa6SX7Qj6HkaE4g/rzwEknYxX1SV+g== 
+      password: M5liEyRcx4RIple/7gWnLPWOKiFj3+Ov97TTL4o4DdQLQHvMNv+gp4OWtTWrNQ26yvNL8KOH5np2x0sPGhdDNA==     
+      driver-class-name: com.mysql.jdbc.Driver
+       #配置ConfigFilter（Druid内置过滤器之一）的过滤器，用于解压密码
+      filters: config
+       #设置密码需要加密，并配置publickey
+      connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOOvpZquMQlJCNwoM0zzEp8C165Y8jk2OyStiO3zy/gqkW8TzLPdJERnJqdIj5ATEuTK7PDg3EgNsJAbq163atMCAwEAAQ==
+      
+      
+      ##数据库连接池属性配置
+      initial-size: 1
+      #最大连接数量
+      max-active: 20
+      #获取连接时最大等待时间
+      max-wait: 10000
+      #最小连接数量
+      min-idle: 1
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      #用来检测连接是否有效的SQL，解决数据库断开连接的问题
+      validation-query: select 1
+     
+     
+      #statviewServlet统计信息配置
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: admin
+        url-pattern: /druid/* 
+        
+      #WebStatFilter配置  采集web-jdbc关联监控的数据
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      
+           
+  

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- 指定mysql数据库驱动路径 -->
+	<!-- <classPathEntry -->
+	<!-- location="c:/Users/Jiuyun\Libs\mysql-connector-java-5.1.46.jar" /> -->
+	<context id="mysql_mgb">
+		<commentGenerator>
+			<!-- 去除mybatis生成的注释 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!-- JDBC四要素 -->
+		<!-- jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:ORCL" userId="scott"
+			password="123456"></jdbcConnection> -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/purchase?serverTimezone=UTC" userId="root"
+			password="123456">
+			<property name="useInformationSchema" value="true"/>
+			<property name="nullCatalogMeansCurrent" value="true"/>
+		</jdbcConnection>
+		<!-- 声明实体类存放的包名 -->
+		<javaModelGenerator
+			targetPackage="com.turing.bean" targetProject="src/main/java" />
+		<!-- 声明映射文件存放的包名 -->
+		<sqlMapGenerator targetPackage="com.turing.mapper"
+			targetProject="src/main/java" />
+		<!-- 声明数据访问接口存放的包名 -->
+		<javaClientGenerator
+			targetPackage="com.turing.mapper" type="XMLMAPPER"
+			targetProject="src/main/java" />
+		<!-- 扫描哪些表，可以单个声明，也可以使用%通配符表示扫描所有表 -->
+		<table schema="purchase" tableName="%" />
+		
+	</context>
+</generatorConfiguration>

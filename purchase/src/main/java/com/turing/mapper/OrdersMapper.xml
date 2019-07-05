@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turing.mapper.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.turing.bean.Orders">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ORDER_NUM" jdbcType="VARCHAR" property="orderNum" />
+    <result column="ORDER_SOURCE" jdbcType="VARCHAR" property="orderSource" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="AMOUNT" jdbcType="VARCHAR" property="amount" />
+    <result column="MEASURE_UNIT" jdbcType="VARCHAR" property="measureUnit" />
+    <result column="UNIT_PRICE" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="SUM_PRICE" jdbcType="DECIMAL" property="sumPrice" />
+    <result column="START_DATE" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="END_DATE" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="AUTHOR_ID" jdbcType="BIGINT" property="authorId" />    
+    <result column="AUTHOR" jdbcType="VARCHAR" property="author" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="FAX" jdbcType="VARCHAR" property="fax" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="STOCK_ID" jdbcType="BIGINT" property="stockId" />   
+    <result column="ENQUIRE_ID" jdbcType="BIGINT" property="enquireId" />
+    <result column="CONT_APP_ID" jdbcType="BIGINT" property="contAppId" />
+    <result column="QUOTE_ID" jdbcType="BIGINT" property="quoteId" />
+    <result column="CONT_ID" jdbcType="BIGINT" property="contId" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <!-- property：指明关联属性 -->
+    <!-- column：把第一次查询中的哪一个外键值交给第二次查询作为查询条件 -->
+    <!-- select：第二次查询的sql语句id -->  
+    <association column="AUTHOR_ID" property="authorObj" select="selectAUTHOR" />  
+    <association column="STOCK_ID" property="stockObj" select="selectSTOCK" />  
+    <association column="ENQUIRE_ID" property="enquireObj" select="selectENQUIRE" />
+    <association column="CONT_APP_ID" property="contractApplyObj" select="selectCONT_APP" />
+    <association column="QUOTE_ID" property="quoteObj" select="selectQUOTE" />
+    <association column="CONT_ID" property="contractObj" select="selectCONT" />
+  </resultMap>
+  <select id="selectAUTHOR" resultType="com.turing.bean.SysUsers">
+  	select * from sys_users where id = #{AUTHOR_ID}
+  </select>
+  <select id="selectSTOCK" resultType="com.turing.bean.Stock">
+  	select * from stock where id = #{STOCK_ID}
+  </select>
+  <select id="selectENQUIRE" resultType="com.turing.bean.Enquire">
+  	select * from enquire where id = #{ENQUIRE_ID}
+  </select>
+  <select id="selectCONT_APP" resultType="com.turing.bean.ContractApply">
+  	select * from contract_apply where id = #{CONT_APP_ID}
+  </select>
+  <select id="selectQUOTE" resultType="com.turing.bean.Quote">
+  	select * from quote where id = #{QUOTE_ID}
+  </select>
+  <select id="selectCONT" resultType="com.turing.bean.Contract">
+  	select * from contract where id = #{CONT_ID}
+  </select>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, ORDER_NUM, ORDER_SOURCE, MATERIAL_CODE, MATERIAL_NAME, AMOUNT, MEASURE_UNIT, 
+    UNIT_PRICE, SUM_PRICE, START_DATE, END_DATE, ADDRESS, AUTHOR_ID, AUTHOR, PHONE, FAX, 
+    EMAIL, REMARK, STOCK_ID, ENQUIRE_ID, CONT_APP_ID, QUOTE_ID, CONT_ID, STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.turing.bean.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from orders
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.turing.bean.OrdersExample">
+    delete from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.turing.bean.Orders">
+    insert into orders (ID, ORDER_NUM, ORDER_SOURCE, 
+      MATERIAL_CODE, MATERIAL_NAME, AMOUNT, 
+      MEASURE_UNIT, UNIT_PRICE, SUM_PRICE, 
+      START_DATE, END_DATE, ADDRESS, 
+      AUTHOR_ID, AUTHOR, PHONE, 
+      FAX, EMAIL, REMARK, 
+      STOCK_ID, ENQUIRE_ID, CONT_APP_ID, 
+      QUOTE_ID, CONT_ID, STATUS
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderNum,jdbcType=VARCHAR}, #{orderSource,jdbcType=VARCHAR}, 
+      #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, 
+      #{measureUnit,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, #{sumPrice,jdbcType=DECIMAL}, 
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, 
+      #{authorId,jdbcType=BIGINT}, #{author,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{fax,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{stockId,jdbcType=BIGINT}, #{enquireId,jdbcType=BIGINT}, #{contAppId,jdbcType=BIGINT}, 
+      #{quoteId,jdbcType=BIGINT}, #{contId,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.turing.bean.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderNum != null">
+        ORDER_NUM,
+      </if>
+      <if test="orderSource != null">
+        ORDER_SOURCE,
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE,
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME,
+      </if>
+      <if test="amount != null">
+        AMOUNT,
+      </if>
+      <if test="measureUnit != null">
+        MEASURE_UNIT,
+      </if>
+      <if test="unitPrice != null">
+        UNIT_PRICE,
+      </if>
+      <if test="sumPrice != null">
+        SUM_PRICE,
+      </if>
+      <if test="startDate != null">
+        START_DATE,
+      </if>
+      <if test="endDate != null">
+        END_DATE,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="authorId != null">
+        AUTHOR_ID,
+      </if>
+      <if test="author != null">
+        AUTHOR,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="fax != null">
+        FAX,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="stockId != null">
+        STOCK_ID,
+      </if>
+      <if test="enquireId != null">
+        ENQUIRE_ID,
+      </if>
+      <if test="contAppId != null">
+        CONT_APP_ID,
+      </if>
+      <if test="quoteId != null">
+        QUOTE_ID,
+      </if>
+      <if test="contId != null">
+        CONT_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSource != null">
+        #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="measureUnit != null">
+        #{measureUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sumPrice != null">
+        #{sumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=BIGINT},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stockId != null">
+        #{stockId,jdbcType=BIGINT},
+      </if>
+      <if test="enquireId != null">
+        #{enquireId,jdbcType=BIGINT},
+      </if>
+      <if test="contAppId != null">
+        #{contAppId,jdbcType=BIGINT},
+      </if>
+      <if test="quoteId != null">
+        #{quoteId,jdbcType=BIGINT},
+      </if>
+      <if test="contId != null">
+        #{contId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.turing.bean.OrdersExample" resultType="java.lang.Long">
+    select count(*) from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update orders
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderNum != null">
+        ORDER_NUM = #{record.orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSource != null">
+        ORDER_SOURCE = #{record.orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialCode != null">
+        MATERIAL_CODE = #{record.materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialName != null">
+        MATERIAL_NAME = #{record.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null">
+        AMOUNT = #{record.amount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.measureUnit != null">
+        MEASURE_UNIT = #{record.measureUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPrice != null">
+        UNIT_PRICE = #{record.unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sumPrice != null">
+        SUM_PRICE = #{record.sumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.startDate != null">
+        START_DATE = #{record.startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endDate != null">
+        END_DATE = #{record.endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorId != null">
+        AUTHOR_ID = #{record.authorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.author != null">
+        AUTHOR = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        PHONE = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fax != null">
+        FAX = #{record.fax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockId != null">
+        STOCK_ID = #{record.stockId,jdbcType=BIGINT},
+      </if>
+      <if test="record.enquireId != null">
+        ENQUIRE_ID = #{record.enquireId,jdbcType=BIGINT},
+      </if>
+      <if test="record.contAppId != null">
+        CONT_APP_ID = #{record.contAppId,jdbcType=BIGINT},
+      </if>
+      <if test="record.quoteId != null">
+        QUOTE_ID = #{record.quoteId,jdbcType=BIGINT},
+      </if>
+      <if test="record.contId != null">
+        CONT_ID = #{record.contId,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update orders
+    set ID = #{record.id,jdbcType=BIGINT},
+      ORDER_NUM = #{record.orderNum,jdbcType=VARCHAR},
+      ORDER_SOURCE = #{record.orderSource,jdbcType=VARCHAR},
+      MATERIAL_CODE = #{record.materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{record.materialName,jdbcType=VARCHAR},
+      AMOUNT = #{record.amount,jdbcType=VARCHAR},
+      MEASURE_UNIT = #{record.measureUnit,jdbcType=VARCHAR},
+      UNIT_PRICE = #{record.unitPrice,jdbcType=DECIMAL},
+      SUM_PRICE = #{record.sumPrice,jdbcType=DECIMAL},
+      START_DATE = #{record.startDate,jdbcType=TIMESTAMP},
+      END_DATE = #{record.endDate,jdbcType=TIMESTAMP},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      AUTHOR_ID = #{record.authorId,jdbcType=BIGINT},
+      AUTHOR = #{record.author,jdbcType=VARCHAR},
+      PHONE = #{record.phone,jdbcType=VARCHAR},
+      FAX = #{record.fax,jdbcType=VARCHAR},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      STOCK_ID = #{record.stockId,jdbcType=BIGINT},
+      ENQUIRE_ID = #{record.enquireId,jdbcType=BIGINT},
+      CONT_APP_ID = #{record.contAppId,jdbcType=BIGINT},
+      QUOTE_ID = #{record.quoteId,jdbcType=BIGINT},
+      CONT_ID = #{record.contId,jdbcType=BIGINT},
+      STATUS = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.turing.bean.Orders">
+    update orders
+    <set>
+      <if test="orderNum != null">
+        ORDER_NUM = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSource != null">
+        ORDER_SOURCE = #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        AMOUNT = #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="measureUnit != null">
+        MEASURE_UNIT = #{measureUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        UNIT_PRICE = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sumPrice != null">
+        SUM_PRICE = #{sumPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="startDate != null">
+        START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="authorId != null">
+        AUTHOR_ID = #{authorId,jdbcType=BIGINT},
+      </if>
+      <if test="author != null">
+        AUTHOR = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        FAX = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stockId != null">
+        STOCK_ID = #{stockId,jdbcType=BIGINT},
+      </if>
+      <if test="enquireId != null">
+        ENQUIRE_ID = #{enquireId,jdbcType=BIGINT},
+      </if>
+      <if test="contAppId != null">
+        CONT_APP_ID = #{contAppId,jdbcType=BIGINT},
+      </if>
+      <if test="quoteId != null">
+        QUOTE_ID = #{quoteId,jdbcType=BIGINT},
+      </if>
+      <if test="contId != null">
+        CONT_ID = #{contId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.turing.bean.Orders">
+    update orders
+    set ORDER_NUM = #{orderNum,jdbcType=VARCHAR},
+      ORDER_SOURCE = #{orderSource,jdbcType=VARCHAR},
+      MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      AMOUNT = #{amount,jdbcType=VARCHAR},
+      MEASURE_UNIT = #{measureUnit,jdbcType=VARCHAR},
+      UNIT_PRICE = #{unitPrice,jdbcType=DECIMAL},
+      SUM_PRICE = #{sumPrice,jdbcType=DECIMAL},
+      START_DATE = #{startDate,jdbcType=TIMESTAMP},
+      END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      AUTHOR_ID = #{authorId,jdbcType=BIGINT},
+      AUTHOR = #{author,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      FAX = #{fax,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      STOCK_ID = #{stockId,jdbcType=BIGINT},
+      ENQUIRE_ID = #{enquireId,jdbcType=BIGINT},
+      CONT_APP_ID = #{contAppId,jdbcType=BIGINT},
+      QUOTE_ID = #{quoteId,jdbcType=BIGINT},
+      CONT_ID = #{contId,jdbcType=BIGINT},
+      STATUS = #{status,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
