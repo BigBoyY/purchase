@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common/head::headQuote('需求计划录入')}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body style="text-align: center;">
+	<!-- 用户选择物资页面 -->
+	<div id="add">
+	<div th:replace="common/head::headtitle('需求计划录入——选择物资')"></div>	
+	<input id="tb" name="class" />
+	<input id="tb2" name="class2" />
+	<table id="data" class="easyui-datagrid">
+	</table>
+	<a id="btn"   class="easyui-linkbutton" data-options="iconCls:'icon-search'">下一步</a> 
+	</div>	
+	<!-- 用户编辑物资页面 -->
+	<div id="edit"	>
+	<div th:replace="common/head::headtitle('需求计划录入——编辑物资')"></div>
+	<table id="selectdata" class="easyui-datagrid">
+	
+	</table>
+	<div >		 
+			<table id="edittb">
+		   		
+		    </table> 
+	</div>
+	</div>
+</body>
+<script>
+$(function(){
+		$("#edit").hide();
+		//选中的数组
+		var selectdataRows=[];				 
+		 //下拉框类型1
+		 $("#tb").combobox({
+			url:"",
+			valueField:'',
+			textField:'',
+			onselect:function(rec){
+				var dataurl="";
+				$("#data").datagrid('reload',dataurl);
+				var tb2url = '';   
+	            $('#tb2').combobox('reload', tb2url); 
+			}
+		});
+		 //下拉框类型2
+		$("#tb2").combobox({
+			url:"",
+			valueField:'',
+			textField:'',
+			onselect:function(rec){
+				var url="";
+				$("#data").datagrid('reload',url);
+			}
+		}) 
+		//展示所有数据
+		$("#data").datagrid({			
+			url:"/find",
+			method:"get",
+			idField:'id',
+			fitColumns:true,
+			checkOnSelect:true,
+			selectOnCheck:true,	
+			columns:[
+				[
+				{field:'a',title:'选择',checkbox:true,width:100},
+				{field:'id',title:'序号',sortable:true,width:100},
+				{field:'materialNum',title:'物资编码',width:100},
+				{field:'materialName',title:'物资名称',width:100}			
+				]
+			],
+			pagination:true,
+			pageNumber:1,
+			pageSize:4,
+			pageList:[4,8,12],
+			rownumbers:true,
+		});
+		 //下一步点击事件
+		$("#btn").click(function(){
+			 //add页面消失
+	      	 $("#add").hide(); 
+	      	//打开编辑窗口
+	      	 $("#edit").show(); 
+			//获取选中行
+			var selectRow=$("#data").datagrid('getSelections');
+			//循环添加到数组中	
+			 for(var i=0; i<selectRow.length; i++){
+				var selectdataAll=$("#selectdata").datagrid('getData');		      
+			        		selectdataRows.push({
+			        	        "id":selectRow[i].id,
+			        	        "materialNum":selectRow[i].materialNum,
+					        	"materialName":selectRow[i].materialName,
+					        	"status":"未完成",
+			      })		           
+			 }
+			 //将数组生成表格
+			 $("#selectdata").datagrid({				 				 	
+				 	data:selectdataRows.slice(0,2),
+				 	total:selectdataRows.length,	
+				 	singleSelect:true,
+				 	fitColumns:true,
+					pagination:true,
+					idField:'id',
+					rownumbers:true,
+					pageNumber:1,
+			        pageSize:2,	
+			        pageList:[2,4,6],
+				 	columns:[
+						[
+						{field:'a',title:'选择',checkbox:true,width:100},
+						{field:'id',title:'序号',sortable:true,width:100},
+						{field:'materialNum',title:'物资编码',width:100},
+						{field:'materialName',title:'物资名称',width:100},
+						{field:'status',title:'状态',width:100}
+						]
+					],
+					//选中数据行打开重新加载编辑窗口
+					onClickRow:function(rowIndex, rowData){						
+						$("#edittb").propertygrid("load","/findone/"+rowData.id);
+					}
+			    }); 
+			//本地数据表格分页设置
+			 var pager = $("#selectdata").datagrid("getPager");
+		      	pager.pagination({
+		        total:selectdataRows.length,
+		        pageNumber:1,
+		        pageSize:2,
+		      //本地数据分页点击事件
+		        onSelectPage:function (pageNo, pageSize) {
+		          var start = (pageNo - 1) * pageSize;
+		          var end = start + pageSize;
+		          $("#selectdata").datagrid("loadData", selectdataRows.slice(start, end));
+		          //重新加载数据
+		          pager.pagination('refresh', {
+		        	total:selectdataRows.length,
+		        	pageSize:pageSize,
+		            pageNumber:pageNo,
+		          });
+		        }
+		      });
+		      	//属性编辑窗口
+		      	$("#edittb").propertygrid({			 
+					 scrollbarSize: 0,
+					 //三个按钮 
+					 toolbar:[{
+						 	text:'重新选择物资',
+							iconCls: 'icon-edit',
+							handler:reelect,
+							}
+					 		,'-',
+					 		{
+							text:'保存',
+							iconCls: 'icon-save',
+							handler: saveByJson,
+							}
+							,'-',
+							{
+								text:'全部需求录入完毕',
+								iconCls: 'icon-save',
+								handler: function(){
+										//发送请求提交到数据库
+									location="/submit";
+								}						
+							}
+						]
+				 });
+			}); 
+		 
+		 
+		 //获取属性窗口的值生成json
+		 function saveByJson(){
+			 var json={};
+			 		//非空验证
+					var check=false;
+					var attrs=$("#edittb").propertygrid("getRows");
+					for(var i=0;i<attrs.length;i++){
+						if(attrs[i].value==null&&attrs[i].name!="备注"){
+							alert("请填写完整信息");
+							check=true;
+							break;
+						}						
+					}
+					if(!check){
+						//获取选中行
+						var row=$("#selectdata").datagrid('getSelected');	
+						//创建json对象
+						json["materialCode"]=row.materialNum;
+						json["materialName"]=row.materialName;
+						json["amount"]=attrs[2].value;
+						json["measureUnit"]=attrs[3].value;
+						json["unitPrice"]=attrs[4].value;
+						json["startDate"]=attrs[5].value;
+						json["remark"]=attrs[6].value;
+						/* json["authorId"]=$("#user").text; */
+						//发送保存请求
+						$.ajax({
+							url:'/addCahce',
+							method:"post",
+							contentType: "application/json;charset=utf-8",
+							datatype:"json",
+							data:JSON.stringify(json),
+							success:function(rdata){
+								//修改行数据状态为完成
+								if(rdata="yes"){
+									//获取选中行
+									var row=$("#selectdata").datagrid('getSelected');
+									//获取选中行索引
+									var index=$("#selectdata").datagrid('getRowIndex',row);
+									//修改行
+									$("#selectdata").datagrid('updateRow',{
+										index: index,
+										row:{
+											status:'完成'
+										}
+									})
+								}
+							}
+						})
+					}
+		 }	
+		 //重新选择物资
+		 function reelect(){
+			//清空所有勾选的选项
+				$("#data").datagrid('clearSelections');
+				//显示所有数据
+				$("#add").show();
+				//清空数组并隐藏编辑表格
+				selectdataRows=[];
+				$("#selectdata").datagrid("loadData", selectdataRows.slice(0, 2));
+				$("#edit").hide();
+				//发送请求清空需求计划集合
+				$.ajax({
+					url:'/clear',
+				})
+		 }
+	});
+
+</script>
+</html>

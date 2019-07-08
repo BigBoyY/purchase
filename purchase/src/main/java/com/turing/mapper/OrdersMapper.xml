@@ -29,6 +29,7 @@
     <!-- property：指明关联属性 -->
     <!-- column：把第一次查询中的哪一个外键值交给第二次查询作为查询条件 -->
     <!-- select：第二次查询的sql语句id -->  
+    <association column="MATERIAL_CODE" property="materialObj" select="selectMaterial" />
     <association column="AUTHOR_ID" property="authorObj" select="selectAUTHOR" />  
     <association column="STOCK_ID" property="stockObj" select="selectSTOCK" />  
     <association column="ENQUIRE_ID" property="enquireObj" select="selectENQUIRE" />
@@ -36,6 +37,9 @@
     <association column="QUOTE_ID" property="quoteObj" select="selectQUOTE" />
     <association column="CONT_ID" property="contractObj" select="selectCONT" />
   </resultMap>
+  <select id="" resultType="com.turing.bean.Material">
+  	select * from material where MATERIAL_NUM = #{MATERIAL_CODE}
+  </select>
   <select id="selectAUTHOR" resultType="com.turing.bean.SysUsers">
   	select * from sys_users where id = #{AUTHOR_ID}
   </select>

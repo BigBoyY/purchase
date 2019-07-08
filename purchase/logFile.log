@@ -1,0 +1,11 @@
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] INFO  o.s.b.a.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin - Application shutdown requested.
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3fa55f10, started on Sun Jul 07 20:58:57 CST 2019
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.h.internal.SessionFactoryImpl - HHH000031: Closing
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.h.t.s.TypeConfiguration$Scope - Un-scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration$Scope@447f5749] from SessionFactory [org.hibernate.internal.SessionFactoryImpl@5891baca]
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.h.s.i.AbstractServiceRegistryImpl - Implicitly destroying ServiceRegistry on de-registration of all child ServiceRegistries
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.h.b.r.i.BootstrapServiceRegistryImpl - Implicitly destroying Boot-strap registry on de-registration of all child ServiceRegistries
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.s.j.e.a.AnnotationMBeanExporter - Unregistering JMX-exposed beans on shutdown
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] DEBUG o.s.j.e.a.AnnotationMBeanExporter - Unregistering JMX-exposed beans
+14:19:49 [RMI TCP Connection(124)-127.0.0.1] INFO  c.a.druid.pool.DruidDataSource - {dataSource-18} closed

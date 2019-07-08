@@ -8,11 +8,12 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.turing.service.Service;
 
 
-@org.springframework.stereotype.Service
+@Component
 public class Serivce implements Service {
 
 	private final String mapperPack = "com.turing.mapper.";
@@ -38,6 +39,7 @@ public class Serivce implements Service {
 			//生成mapper实例
 			String mapperName = mapperPack+className+"Mapper";
 			Class mapperClass = Class.forName(mapperName);
+			
 			Object mapperObj = session.getMapper(mapperClass);
 			
 			//生成example

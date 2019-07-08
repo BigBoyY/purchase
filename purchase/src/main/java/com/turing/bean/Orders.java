@@ -51,8 +51,16 @@ public class Orders {
     private Long contId;
 
     private String status;
-    
-    private SysUsers authorObj;
+    private Material materialObj;
+    public Material getMaterialObj() {
+		return materialObj;
+	}
+
+	public void setMaterialObj(Material materialObj) {
+		this.materialObj = materialObj;
+	}
+
+	private SysUsers authorObj;
     private Stock stockObj;
     private Enquire enquireObj;
     private ContractApply contractApplyObj;

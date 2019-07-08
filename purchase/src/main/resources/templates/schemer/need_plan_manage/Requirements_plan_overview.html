@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common/head::headQuote('需求计划录入')}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#ff div{
+	float: left;
+}
+</style>
+</head>
+<body style="text-align: center;">
+	<!-- 需求计划一览 -->
+	<div th:replace="common/head::headtitle('需求计划一览表')"></div>
+	<form id="ff" method="post">  
+    
+        <label for="materialNum">物资编码：</label>  
+        <input class="easyui-validatebox" type="text" id="materialNum" name="materialNum"  />  
+    
+        <label for="materialName">物资名称：</label>  
+        <input class="easyui-validatebox" type="text" id="materialName" name="materialName" />  
+     
+        <label for="contId">状态</label>  
+        <input class="easyui-combobox" type="text" id="contId" name="contId" data-options="
+        panelHeight:100,
+		valueField: 'label',
+		textField: 'value',
+		data: [{
+			label: '',
+			value: '全部'
+		},{
+			label: 'C001-10',
+			value: '未确认'
+		},{
+			label: 'C001-10',
+			value: '已确认'
+		}]" />  
+      
+       <a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> 
+   	   <a id="clear" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">清空</a>
+</form>  	
+	<table id="data" class="easyui-datagrid">
+	</table>
+</head>
+<body>
+	<script>
+	
+	$(function(){
+		$('#btn').bind('click', function(){ 
+			console.log($("#materialNum").val());
+			console.log($("#materialName").val());
+			console.log($("#contId").val());
+			$("#data").datagrid('reload',{
+				queryParams:{
+					materialNum:$("#materialNum").val(),
+					materialName:$("#materialName").val(),
+					contId:$("#contId").val()
+				}
+			});
+	    });   
+		$('#clear').bind('click',function(){
+			$("#ff").form('clear');
+			$("#data").datagrid('reload',{
+				pageNumber:1,
+				queryParams:{
+					materialNum:$("#materialNum").val(),
+					materialName:$("#materialName").val(),
+					contId:$("#contId").val()
+				}
+			});
+		})
+	//展示C001-10-C001-20需求计划数据
+	$("#data").datagrid({			
+		url:"/test",
+		method:"get",
+		idField:'id',
+		fitColumns:true,
+		checkOnSelect:true,
+		queryParams:{
+			materialNum:$("#materialNum").val(),
+			materialName:$("#materialName").val(),
+			contId:$("#contId").val()
+		},
+		selectOnCheck:true,	
+		columns:[
+			[
+			{field:'a',title:'选择',checkbox:true,width:100},
+			{field:'id',title:'序号',sortable:true,width:100},
+			{field:'materialNum',title:'物资编码',width:100},
+			{field:'materialName',title:'物资名称',width:100},
+			/* {field:'contId',title:'采购进度',width:100,formatter:function(value,row,index){
+						if(value=='C001-10'){
+							return "未确认"
+						}else if(value=="C001-20"){
+							return "已确认"
+						}
+				}
+			}  */
+			
+			]
+		],
+		pagination:true,
+		pageNumber:1,
+		pageSize:4,
+		pageList:[4,8,12],
+		rownumbers:true,
+	});
+	})
+	</script>
+</body>
+</html>
