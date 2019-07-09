@@ -11,6 +11,7 @@
 <body style="text-align: center;">
 	<!-- 需求计划一览 -->
 	<div th:replace="common/head::headtitle('需求计划一览表')"></div>
+	<div id="datagrid">
 	<form id="ff" method="post">  
     
         <label for="materialNum">物资编码：</label>  
@@ -40,6 +41,11 @@
 </form>  	
 	<table id="data" class="easyui-datagrid">
 	</table>
+	</div>
+	<!-- 详情窗口 -->
+	<div id="detailsParent" >
+		<div id="details" style="display: none" ></div>
+	</div>
 </head>
 <body>
 	<script>
@@ -51,7 +57,7 @@
 			console.log($("#contId").val());
 			$("#data").datagrid('reload',{
 				queryParams:{
-					materialNum:$("#materialNum").val(),
+					materialCode:$("#materialNum").val(),
 					materialName:$("#materialName").val(),
 					contId:$("#contId").val()
 				}
@@ -62,19 +68,37 @@
 			$("#data").datagrid('reload',{
 				pageNumber:1,
 				queryParams:{
-					materialNum:$("#materialNum").val(),
+					materialCode:$("#materialNum").val(),
 					materialName:$("#materialName").val(),
 					contId:$("#contId").val()
 				}
 			});
-		})
+		});
 	//展示C001-10-C001-20需求计划数据
+	
 	$("#data").datagrid({			
 		url:"/test",
 		method:"get",
 		idField:'id',
 		fitColumns:true,
 		checkOnSelect:true,
+		toolbar: [{
+			text:'确认',
+			iconCls: 'icon-ok',
+			handler: function(){affirm()}
+		},'-',{
+			text:'详情',
+			iconCls: 'icon-help',
+			handler: function(){details()}
+		},'-',{
+			text:'修改',
+			iconCls: 'icon-edit',
+			handler: function(){alert('help')}
+		},'-',{
+			text:'删除',
+			iconCls: 'icon-remove',
+			handler: function(){remove()}
+		}],
 		queryParams:{
 			materialNum:$("#materialNum").val(),
 			materialName:$("#materialName").val(),
@@ -94,8 +118,7 @@
 							return "已确认"
 						}
 				}
-			}  */
-			
+			}  */			
 			]
 		],
 		pagination:true,
@@ -104,6 +127,95 @@
 		pageList:[4,8,12],
 		rownumbers:true,
 	});
+		
+		$("#details").propertygrid({
+			scrollbarSize: 0,
+			 toolbar:[{
+				 	text:'关闭',
+					iconCls: 'icon-no',
+					handler:function(){								
+						$("#detailsParent").hide();
+						$("#datagrid").show();
+					}
+				}
+			 ]		
+		});
+		//确认
+		function affirm(){
+			var selectRow=$("#data").datagrid('getSelections');
+			var affirmId=[];
+			for(var i=0;i<selectRow.length;i++){
+				if(selectRow[i].contId=="C001-10"){
+					affirmId.push(selectRow[i].id);
+				}
+			}
+			alert(affirmId);
+			$.ajax({
+				url:'',
+				method:'post',
+				dataType:'Json',
+				data:{ids,affirmId},
+				traditional: true,
+				success:function(data){
+					reloadDatagrid();
+				}
+			})
+		}
+		//查看详情
+		function details(){
+			//必须只选中一行
+			if(check()){
+				//获取行
+				var selectRow=$("#data").datagrid('getSelections');
+				var id=selectRow[0].id;
+				//数据表格消失
+				$("#datagrid").hide();
+				$("#detailsParent").show();
+				$("#details").propertygrid("load","details/"+id);											
+			}
+		}
+		function edit(){
+			if(check()){
+				
+			}
+		}
+		function remove(){
+			if(check()){
+				var selectRow=$("#data").datagrid('getSelections');
+				if(selectRow[0].contId=="C001-20"){
+					alert("已确认的需求无法删除");
+					return;
+				}
+				var id=selectRow[0].id;
+				
+				if(confirm("确认删除该需求计划！")){
+					removeRow();
+				}
+			}
+		}
+		function removeRow(){
+			$.ajax({
+				url:"",
+				method:"post",
+				success:function(rdata){
+					reloadDatagrid();
+					if(rdata=="yes"){
+						reloadDatagrid();
+					}
+				}
+			});
+		}
+		function reloadDatagrid(){
+			$("#data").datagrid('reload',{
+				pageNumber:1,
+				queryParams:{
+					materialCode:$("#materialNum").val(),
+					materialName:$("#materialName").val(),
+					contId:$("#contId").val()
+				}
+			});
+		}
+		$("#detailsParent").hide();
 	})
 	</script>
 </body>

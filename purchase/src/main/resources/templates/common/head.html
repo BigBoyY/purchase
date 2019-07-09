@@ -21,6 +21,21 @@
 	}
 	
 </style>
+<script>
+//表格单选判断
+function check(){
+	var selectRow=$("#data").datagrid('getSelections');
+	if(selectRow==0){
+		alert("必须选择一行数据");
+		return false;
+	}
+	if(selectRow.length>1){
+		alert("一次只能选择一行数据");
+		return false;
+	}
+	return true;
+}
+</script>
 </head>
 <body>	
 	<div th:fragment="headtitle(headInfo)">

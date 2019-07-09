@@ -55,7 +55,7 @@ $(function(){
 		}) 
 		//展示所有数据
 		$("#data").datagrid({			
-			url:"/find",
+			url:"/Material/All",
 			method:"get",
 			idField:'id',
 			fitColumns:true,
@@ -116,7 +116,7 @@ $(function(){
 					],
 					//选中数据行打开重新加载编辑窗口
 					onClickRow:function(rowIndex, rowData){						
-						$("#edittb").propertygrid("load","/findone/"+rowData.id);
+						$("#edittb").propertygrid("load","/Orders/edit/"+rowData.id);
 					}
 			    }); 
 			//本地数据表格分页设置
