@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class QuoteExample {
+public class QuoteExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;

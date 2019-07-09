@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ContractExample {
+public class ContractExample extends PageDomain  {
     protected String orderByClause;
 
     protected boolean distinct;

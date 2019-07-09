@@ -1,7 +1,9 @@
 package com.turing;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +15,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.turing.bean.Orders;
 import com.turing.bean.OrdersExample;
+import com.turing.bean.PageDomain;
 import com.turing.bean.SysUsers;
 import com.turing.mapper.OrdersMapper;
 import com.turing.service.BigService;
+import com.turing.util.ReflatUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,6 +27,9 @@ import com.turing.service.BigService;
 public class PurchaseApplicationTests {
 	@Autowired
 	private OrdersMapper ordersmapper;
+	
+	@Autowired
+	private ReflatUtil reflatUtil;
 	
 	@Autowired
 	private BigService service;
@@ -35,19 +42,29 @@ public class PurchaseApplicationTests {
 	}
 	@Test
 	public void test() {
-		/*Orders order = new Orders();
-		order.setId((long)1);
-		List list = service.findList(order, 1, 1);
+		Orders order = new Orders();
+		PageDomain pageDomain = new PageDomain();
+		pageDomain.isLimit = true;
+		pageDomain.page = 1;
+		pageDomain.rows = 2;
+		pageDomain.sortName = "id";
+		pageDomain.sortOrder="desc";
+		Map<String, String> map = new HashMap<>();
+		map.put("materialCode", "888");
+		pageDomain.queryParams = map;
+		order = (Orders) reflatUtil.reflatField(order, map);
+		order.setStatus("C001-20");
+		List list = service.findList(order, pageDomain);
 		for (Object object : list) {
 			Orders orders = (Orders) object;
 			System.out.println(orders.getMaterialName());
-		}*/
-		try {
+		}
+		/*try {
 			Orders orders = (Orders) service.findOneById(1, new Orders());
 			System.out.println(orders.getMaterialName());
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	@Test
 	public void update() {
@@ -71,7 +88,7 @@ public class PurchaseApplicationTests {
 	public void insert() {
 		Orders order = new Orders();
 		order.setMaterialName("棉花水");
-		order.setMaterialCode("999");
+		order.setMaterialCode("777");
 		service.insert(order);
 	}
 	@Test

@@ -3,7 +3,7 @@ package com.turing.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SysMenusExample {
+public class SysMenusExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;

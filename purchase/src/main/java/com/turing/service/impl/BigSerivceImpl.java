@@ -9,12 +9,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.turing.bean.PageDomain;
 import com.turing.mapper.OrdersMapper;
 import com.turing.service.BigService;
+import com.turing.util.ReflatUtil;
 
 
 @org.springframework.stereotype.Service
-public class BigSerivceImpl implements BigService {
+public class BigSerivceImpl  extends ReflatUtil implements BigService {
 
 	private final String mapperPack = "com.turing.mapper.";
 	private final String beanPack = "com.turing.bean.";
@@ -43,7 +45,7 @@ public class BigSerivceImpl implements BigService {
 	}
 	
 	@Override
-	public List<Object> findList(Object obj, int page, int pageSize) {
+	public List<Object> findList(Object obj, PageDomain pageDomain) {
 		List list = new ArrayList();
 		SqlSession session = factory.openSession();
 		Class cls = obj.getClass();
@@ -59,7 +61,26 @@ public class BigSerivceImpl implements BigService {
 			String exampleName = beanPack+className+"Example";
 			Class exampleClass = Class.forName(exampleName);
 			Object example = exampleClass.newInstance();
-			
+			int page = pageDomain.page;
+			//设置分页
+			if(page>0) {
+				page = (page-1)*pageDomain.rows;
+				//获取example反射类的公有属性 包括父类
+				Field examplePage = exampleClass.getField("page");
+				Field examplePageSize = exampleClass.getField("rows");
+				Field exampleIsLimit = exampleClass.getField("isLimit");				
+				examplePage.set(example, page);
+				examplePageSize.set(example, pageDomain.rows);
+				exampleIsLimit.set(example, true);//开启分页				
+			}
+			//设置排序
+			if(pageDomain.sortName!=null) {
+				Field exampleSortName = exampleClass.getDeclaredField("orderByClause");
+				Field exampleSortOrder = exampleClass.getField("sortOrder");
+				exampleSortName.setAccessible(true);
+				exampleSortName.set(example, pageDomain.sortName);
+				exampleSortOrder.set(example, pageDomain.sortOrder);
+			}
 			//生成criteria对象
 			Method criteriaMethod = exampleClass.getDeclaredMethod("createCriteria", null);
 			Object criteria = criteriaMethod.invoke(example, null);
@@ -294,61 +315,13 @@ public class BigSerivceImpl implements BigService {
 	}
 
 	@Override
-	public int maxPage(Object obj) {
+	public int maxPage(Object obj,int pageSize) {
 		int count = (int) countByExample(obj);
-		
+		count = (int) Math.ceil((double)count/pageSize);
 		return count;
-	}
+	}	
 	
 	
-	
-	/**
-	 * 添加criteria条件查询
-	 * @param objCls 实体对象，携带数据
-	 * @param cri criteria
-	 * @return
-	 */
-	public Object addCriteria(Object obj,Object cri) {				
-		try {
-			Class objCls = obj.getClass();
-			Class objCri = cri.getClass();
-			Field [] fields = objCls.getDeclaredFields();
-			for (Field field : fields) {
-				field.setAccessible(true);
-				//获取属性值
-				Object fieldValue = field.get(obj);
-				if(fieldValue!=null) {
-					String filedName = field.getName();
-					String methodName = "";//将要执行的方法名
-					//首字母大写
-					String letter = filedName.substring(0,1).toUpperCase();
-					//判断属性值类型
-					Class Type = field.getType();
-					String fieldType = Type.getSimpleName();
-					//数字类型
-					if(fieldType.equals("int")||fieldType.equals("Integer")||fieldType.equals("Long")) {
-						methodName = "and"+letter+filedName.substring(1)+"EqualTo";
-					}
-					//字符串类型
-					if(fieldType.equals("String")) {
-						methodName = "and"+letter+filedName.substring(1)+"Like";
-					}
-					//其他类型。。
-					//if(){}
-					System.out.println("methodName="+methodName);
-					System.out.println("fieldValue="+fieldValue);
-					System.out.println("type="+fieldType);
-					Method method = objCri.getDeclaredMethod(methodName, Type);
-					method.invoke(cri, fieldValue);
-					
-				}
-			}
-		} catch (Exception e) {			
-			e.printStackTrace();
-		}
-		
-		return cri;
-	}
 	
 
 }

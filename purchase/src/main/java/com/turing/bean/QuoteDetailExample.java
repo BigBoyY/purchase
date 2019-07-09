@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuoteDetailExample {
+public class QuoteDetailExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;

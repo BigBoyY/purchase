@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContractDetailExample {
+public class ContractDetailExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;

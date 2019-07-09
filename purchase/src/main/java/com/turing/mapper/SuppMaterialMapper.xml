@@ -2,9 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.turing.mapper.SuppMaterialMapper">
   <resultMap id="BaseResultMap" type="com.turing.bean.SuppMaterial">
-    <result column="SUPPLIER_ID" jdbcType="VARCHAR" property="supplierId" />
-    <result column="MATERIAL_ID" jdbcType="VARCHAR" property="materialId" />
+    <result column="SUPPLIER_ID" jdbcType="BIGINT" property="supplierId" />
+    <result column="MATERIAL_ID" jdbcType="BIGINT" property="materialId" />
+    <collection column="SUPPLIER_ID" property="supplierList" select="selectSupplier" />
+    <collection column="MATERIAL_ID" property="materialList" select="selectMaterial" />
   </resultMap>
+  <select id="selectSupplier" resultType="com.turing.bean.Supplier">
+  	select * from Supplier where id in (select SUPPLIER_ID from SUPP_MATERIAL where MATERIAL_ID = #{MATERIAL_ID})
+  </select>
+  <select id="selectMaterial" resultType="com.turing.bean.Material">
+  	select * from Material where id in (select MATERIAL_ID from SUPP_MATERIAL where SUPPLIER_ID = #{SUPPLIER_ID})
+  </select>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -77,8 +86,11 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null">
-      order by ${orderByClause}
+      order by ${orderByClause} ${sortOrder}
     </if>
+    <if test="isLimit">
+   		limit #{page},#{rows}
+   	</if>
   </select>
   <delete id="deleteByExample" parameterType="com.turing.bean.SuppMaterialExample">
     delete from supp_material

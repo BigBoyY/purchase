@@ -52,7 +52,16 @@ public class Orders {
 
     private String status;
     
-    private SysUsers authorObj;
+    private Material materialObj;//物资对象
+    public Material getMaterialObj() {
+		return materialObj;
+	}
+
+	public void setMaterialObj(Material materialObj) {
+		this.materialObj = materialObj;
+	}
+
+	private SysUsers authorObj;
     private Stock stockObj;
     private Enquire enquireObj;
     private ContractApply contractApplyObj;

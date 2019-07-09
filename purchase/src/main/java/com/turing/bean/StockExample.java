@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StockExample {
+public class StockExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;

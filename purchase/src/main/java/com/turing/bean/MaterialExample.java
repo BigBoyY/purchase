@@ -3,7 +3,7 @@ package com.turing.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaterialExample {
+public class MaterialExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;

@@ -77,8 +77,11 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null">
-      order by ${orderByClause}
+      order by ${orderByClause} ${sortOrder}
     </if>
+    <if test="isLimit">
+   		limit #{page},#{rows}
+   	</if>
   </select>
   <delete id="deleteByExample" parameterType="com.turing.bean.StockSupplierExample">
     delete from stock_supplier

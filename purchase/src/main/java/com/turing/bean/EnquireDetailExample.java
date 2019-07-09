@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EnquireDetailExample {
+public class EnquireDetailExample extends PageDomain {
     protected String orderByClause;
 
     protected boolean distinct;
